@@ -1,5 +1,5 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import helloWorldReducer from '../../components/HelloWorld/reducer';
+import homeReducer from '../../components/Home/reducer';
 
-const reducer = combineReducers({ helloWorldReducer });
+const reducer = combineReducers({ homeReducer });
 export default reducer;
