@@ -1,8 +1,8 @@
 import './App.scss';
-import HelloWorld from './components/HelloWorld';
+import Home from './components/Home';
 
 function App() {
-  return <HelloWorld />;
+  return <Home />;
 }
 
 export default App;
