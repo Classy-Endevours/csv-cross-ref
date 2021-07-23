@@ -1,10 +1,10 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
-const helloWorldSlice = createSlice({
-  name: 'helloWorld',
+const homeSlice = createSlice({
+  name: 'home',
   initialState: {
-    value: 'Hello World',
+    value: 'Please add your text input',
   },
   reducers: {
     changeValue: () => {},
@@ -17,6 +17,6 @@ const helloWorldSlice = createSlice({
   },
 });
 
-export const { changeValue, setValue } = helloWorldSlice.actions;
+export const { changeValue, setValue } = homeSlice.actions;
 
-export default helloWorldSlice.reducer;
+export default homeSlice.reducer;
