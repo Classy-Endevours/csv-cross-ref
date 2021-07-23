@@ -1,47 +1,76 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
-import { useActionFetch, useFetch } from '../../hooks/useFetch';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { CSVLink } from 'react-csv';
+import Loader from 'react-loader-spinner';
+
+import { useActionFetch } from '../../hooks/useFetch';
 import { changeValue } from './reducer';
+import { convertCrossRef } from '../../util/convertCrossRef';
+import { API_URL, COLOR, FILE_NAME, HEADERS } from '../../constant/cross-ref';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
 function Home() {
   const { value } = useSelector((state) => state.homeReducer);
   const [text, setText] = useState('');
-  const [refetch, setRefetch] = useState(0);
-  const dispatch = useDispatch();
   const {
     error,
     isLoading,
     result,
+    isSuccess,
     dispatch: dispatcher,
-  } = useActionFetch('https://api.crossref.org/works', {
+  } = useActionFetch(API_URL, {
     params: {
       'query.bibliographic': text,
     },
   });
   return (
-    <div>
-      {isLoading && <p>Loading...</p>}
+    <div style={{ margin: '24px' }}>
       <p>{error.message}</p>
       <h1>{value}</h1>
       <textarea
         type="text"
-        rows="4"
-        cols="50"
+        rows="8"
+        cols="100"
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
       <br />
-      <button
-        type="button"
-        className="mdc-button mdc-button--raised"
-        onClick={() => dispatcher(changeValue(text))}
+      <br />
+      <div
+        style={{
+          display: 'flex',
+          width: '50%',
+          justifyContent: 'space-between',
+        }}
       >
-        <span className="mdc-button__label">Submit</span>
-      </button>
-      <div>
-        <pre>{JSON.stringify(result, null, 2)}</pre>
+        <button
+          type="button"
+          className="mdc-button mdc-button--raised"
+          onClick={() => dispatcher(changeValue(text))}
+        >
+          {isLoading ? (
+            <Loader
+              type="Puff"
+              color={COLOR}
+              height={25}
+              width={25}
+              timeout={3000} // 3 secs
+            />
+          ) : (
+            <span className="mdc-button__label">Submit</span>
+          )}
+        </button>
+        {isSuccess && (
+          <CSVLink
+            data={convertCrossRef(result)}
+            filename={FILE_NAME}
+            headers={HEADERS}
+            className="mdc-button mdc-button--raised"
+          >
+            Download
+          </CSVLink>
+        )}
       </div>
     </div>
   );

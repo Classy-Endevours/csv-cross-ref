@@ -36,6 +36,7 @@ export const useActionFetch = (url, config = {}) => {
   const dispatch = async () => {
     try {
       setError('');
+      setIsSuccess(false);
       setIsLoading(true);
       const response = await axios.get(url, config);
       setIsLoading(false);
