@@ -1,5 +1,6 @@
 export const API_URL = 'https://api.crossref.org/works';
 export const FILE_NAME = 'crossref-reference.csv';
+export const ABSTRACT_FILE_NAME = 'crossref-abstract.csv';
 export const COLOR = '#ffffff';
 export const HEADERS = [
   {
@@ -29,5 +30,24 @@ export const HEADERS = [
   {
     label: 'URL',
     key: 'url',
+  },
+];
+
+export const ABSTRACT_HEADERS = [
+  {
+    label: 'Index',
+    key: 'index',
+  },
+  {
+    label: 'DOI',
+    key: 'value',
+  },
+  {
+    label: 'Abstract',
+    key: 'response',
+  },
+  {
+    label: 'Has error?',
+    key: 'failed',
   },
 ];
