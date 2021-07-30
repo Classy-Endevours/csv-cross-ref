@@ -33,12 +33,12 @@ export const useActionFetch = (url, config = {}) => {
   const [result, setData] = useState({});
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
-  const dispatch = async () => {
+  const dispatch = async (options = {}) => {
     try {
       setError('');
       setIsSuccess(false);
       setIsLoading(true);
-      const response = await axios.get(url, config);
+      const response = await axios.get(url, { ...config, ...options });
       setIsLoading(false);
       setData(response.data);
       setIsSuccess(true);
