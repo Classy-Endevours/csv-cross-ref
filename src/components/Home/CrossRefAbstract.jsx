@@ -29,7 +29,7 @@ function CrossRefAbstract() {
 
   const handleRefCSV = () => {
     if (list.length) {
-      const key = 'link';
+      const key = 'DOI';
       const str = list
         .map((e) => {
           return e[key];

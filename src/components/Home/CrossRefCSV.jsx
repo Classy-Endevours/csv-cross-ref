@@ -30,7 +30,7 @@ function CrossRefCSV() {
 
   const handleRefCSV = () => {
     if (list.length) {
-      const key = 'DOI';
+      const key = 'REF';
       const str = list
         .map((e) => {
           return e[key];
