@@ -1,0 +1,10 @@
+1. Clone the repository (only one time)
+2. Go to the project folder
+3 run command - git pull origin main
+4. run command - npm i (only one time)
+5. run command - npm start (frontend server)
+6. run command - npm run dev (scrapping server)
+
+## First time setting
+run command - npm i sass
+run command - npm i -g nodemon
