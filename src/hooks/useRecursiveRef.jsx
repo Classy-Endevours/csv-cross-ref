@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-export const useRecursive = (url) => {
+export const useRecursiveRef = (url) => {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setData] = useState([]);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -25,18 +25,17 @@ export const useRecursive = (url) => {
           ...dataset[i],
         };
         try {
-          const response = await axios.get(`${url}/${str}`);
-          const { abstract, URL } = response.data.message;
-          if (abstract) {
-            obj.ABSTRACT = abstract;
-          } else if (str.startsWith('10.1002/') || str.startsWith('10.1037/')) {
-            obj.ABSTRACT = 'Blocked';
-            obj.failed = 'DOI is blocked';
+          if (!str) {
+            obj.failed = 'Empty Reference';
           } else {
-            const other = await axios.get(
-              `${process.env.REACT_APP_API_URL}/fallback?URL=${URL}`,
-            );
-            obj.ABSTRACT = other.data.abstract;
+            const response = await axios.get(`${url}`, {
+              params: {
+                'query.bibliographic': str,
+              },
+            });
+            const { DOI, URL } = response.data.message.items[0];
+            obj.DOI = DOI;
+            obj.URL = URL;
           }
         } catch (loopError) {
           obj.failed = 'Some error occurred';

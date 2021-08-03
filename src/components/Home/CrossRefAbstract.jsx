@@ -30,13 +30,7 @@ function CrossRefAbstract() {
   const handleRefCSV = () => {
     if (list.length) {
       const key = 'DOI';
-      const str = list
-        .map((e) => {
-          return e[key];
-        })
-        .join(',');
-      setText(str);
-      dispatcher(str);
+      dispatcher(list, key);
     }
   };
   // handle file upload
@@ -78,7 +72,6 @@ function CrossRefAbstract() {
         {isSuccess && total === index && (
           <CSVLink
             data={result}
-            headers={ABSTRACT_HEADERS}
             filename={ABSTRACT_FILE_NAME}
             className="mdc-button mdc-button--raised"
           >
@@ -102,7 +95,11 @@ function CrossRefAbstract() {
             key={e.value}
           >
             {e.value}
-            {e.failed ? <span>Wrong input</span> : <span>Stored</span>}
+            {e.failed ? (
+              <span>Wrong input: {e.failed} </span>
+            ) : (
+              <span>Stored</span>
+            )}
           </p>
         );
       })}

@@ -4,12 +4,10 @@ import { useSelector } from 'react-redux';
 import { CSVLink } from 'react-csv';
 import Loader from 'react-loader-spinner';
 
-import { useActionFetch } from '../../hooks/useFetch';
-import { changeValue } from './reducer';
-import { convertCrossRef } from '../../util/convertCrossRef';
-import { API_URL, COLOR, FILE_NAME, HEADERS } from '../../constant/cross-ref';
+import { API_URL, COLOR, FILE_NAME } from '../../constant/cross-ref';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import useCSVFile from '../../hooks/useCsvFile';
+import { useRecursiveRef } from '../../hooks/useRecursiveRef';
 
 function CrossRefCSV() {
   const { value } = useSelector((state) => state.homeReducer);
@@ -18,10 +16,12 @@ function CrossRefCSV() {
   const {
     error,
     isLoading,
-    result,
     isSuccess,
+    result,
+    total,
+    index,
     dispatch: dispatcher,
-  } = useActionFetch(API_URL);
+  } = useRecursiveRef(API_URL);
 
   // handle file upload
   const handleFileUpload = (e) => {
@@ -31,20 +31,9 @@ function CrossRefCSV() {
   const handleRefCSV = () => {
     if (list.length) {
       const key = 'REF';
-      const str = list
-        .map((e) => {
-          return e[key];
-        })
-        .join(' ');
-      setText(str);
-      dispatcher({
-        params: {
-          'query.bibliographic': str,
-        },
-      });
+      dispatcher(list, key);
     }
   };
-
   return (
     <div style={{ margin: '24px' }}>
       <p>{error.message}</p>
@@ -76,17 +65,40 @@ function CrossRefCSV() {
             <span className="mdc-button__label">Submit</span>
           )}
         </button>
-        {isSuccess && (
+        {isSuccess && total === index && (
           <CSVLink
-            data={convertCrossRef(result)}
+            data={result}
             filename={FILE_NAME}
-            headers={HEADERS}
             className="mdc-button mdc-button--raised"
           >
             Download
           </CSVLink>
         )}
       </div>
+      {total !== 0 && (
+        <p>
+          Working on {index}/{total}
+        </p>
+      )}
+      {result.map((e) => {
+        return (
+          <p
+            style={{
+              display: 'flex',
+              width: '50%',
+              justifyContent: 'space-between',
+            }}
+            key={e.value}
+          >
+            {e.value}
+            {e.failed ? (
+              <span>Wrong input: {e.failed}</span>
+            ) : (
+              <span>Stored</span>
+            )}
+          </p>
+        );
+      })}
     </div>
   );
 }
